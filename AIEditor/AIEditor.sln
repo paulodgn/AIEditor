@@ -1,0 +1,29 @@
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2008
+
+Project("{F3E76669-A25A-3601-D9AD-CBB97B6DA304}") = "AIEditor", "Assembly-CSharp.csproj", "{5EBEF703-5DD1-F232-FB32-9BC9DB8C4400}"
+EndProject
+Project("{F3E76669-A25A-3601-D9AD-CBB97B6DA304}") = "AIEditor", "Assembly-CSharp-Editor.csproj", "{E7AE1845-247C-A6BC-DD34-22CADC73C093}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5EBEF703-5DD1-F232-FB32-9BC9DB8C4400}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5EBEF703-5DD1-F232-FB32-9BC9DB8C4400}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5EBEF703-5DD1-F232-FB32-9BC9DB8C4400}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5EBEF703-5DD1-F232-FB32-9BC9DB8C4400}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E7AE1845-247C-A6BC-DD34-22CADC73C093}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E7AE1845-247C-A6BC-DD34-22CADC73C093}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E7AE1845-247C-A6BC-DD34-22CADC73C093}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E7AE1845-247C-A6BC-DD34-22CADC73C093}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = Assembly-CSharp.csproj
+	EndGlobalSection
+EndGlobal
