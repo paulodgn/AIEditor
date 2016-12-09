@@ -16,40 +16,11 @@ public class StateMachineEditor : EditorWindow
 	//get objeto selecionado
 	private GameObject obj;
 
-	//comportamenos disponiveis para os estados
-	//public AvaiableStates states;
-
-	//dados para adicionar ao estado
-	string name = "";
-	List<string> names = new List<string>();
-
-	//lsita de estados. cópia da lista do statemechine
-	ReorderableList stateList;
-
-	//bool para verificar se foldout esta visivel
-	bool showStates;
-
-	//posicao inicial para cada estado
-	int inicialPosition = 30;
-
-	//numero de estados criados
-	int numeroEstados=0;
-
 	//flag para determinar se ja foi efetuado load da maquina de estados
 	bool loaded=false;
 
-	//indice da acao desolvida pelo popup. É usada para escolher a acao que o estado vai ter.
-	int[] indice;
-	int lastIndice;
-
-	bool test;
-
-	//janela
-	Rect stateWindow = new Rect(10,10,200,200);
-
 	//lista de janelas
 	List<StateWindowData> stateWindows = new List<StateWindowData>();
-	List<Rect> stateWindows2 = new List<Rect> ();
 
 	//para abrir a janela a partir do menu
 	[MenuItem ("AIEditor/StateMachine")]
@@ -60,8 +31,6 @@ public class StateMachineEditor : EditorWindow
 		window = (StateMachineEditor)EditorWindow.GetWindow(typeof(StateMachineEditor));
 		//muda o titulo a janela
 		window.title = "State Machine";
-
-
 	}
 
 
@@ -141,56 +110,18 @@ public class StateMachineEditor : EditorWindow
 			stateMachine.actions.listaActions.Clear ();
 			stateMachine.actions.CreateActionList ();
 		}
-
-		//botao para fazer load das acoes disponiveis
-
-
 	}
 
 	void CreateWindow(int unusedWindow)
 	{
-		GUILayout.BeginHorizontal ();
-		GUILayout.Label ("State Name");
-		//name = GUILayout.TextField (name, 25);
-		stateWindows[unusedWindow].name = GUILayout.TextField(stateWindows[unusedWindow].name, 25);
-
+		//desenha a janela respetiva
 		stateWindows [unusedWindow].DrawWindow ();
-		//Debug.Log (unusedWindow + "  + " + stateWindows [unusedWindow].name);
-		/*
-		//vai buscar as acoes disponiveis á lista de acoes para as mostrar no popup
-		string[] options = new string[stateMachine.actions.listaActions.Count];
-		for (int i = 0; i < stateMachine.actions.listaActions.Count; i++) 
-		{
-			options [i] = stateMachine.actions.listaActions [i].Name;
-		}
 
-		//POPUP para mostrar todas as acoes disponiveis
-		GUILayout.BeginArea (new Rect (95, 60, 100, 50));
+		//atribui o nome do textfield ao nome do estado
+		stateMachine.StateList [unusedWindow].StateName = stateWindows [unusedWindow].GetStateName ();
 
-		indice = new int[stateWindows.Count];
-		lastIndice = EditorGUILayout.Popup (lastIndice, options); //PROBLEMA. NA SEGUNDA FRAME O INDICE NAO MUDA, LOGO FICAM OS DOIS ESTADOS COM A MESMA ACCAO!
-		indice[unusedWindow] = lastIndice;
-		//a opcao escolhida é o indice da acao a ser executada pelo estado.
-		//atribuimos a este estado a sua açao.
-
-		//procurar qual o estado da respetiva janela
-		//StateClass tempState = stateMachine.StateList.Find(x => x.ID == unusedWindow);
-		//tempState.currentStateAction = stateMachine.actions.listaActions [indice].stateAction;
-
-		stateMachine.StateList[unusedWindow].currentStateAction = stateMachine.actions.listaActions [lastIndice].stateAction;
-		//Debug.Log (stateMachine.actions.listaActions [indice].Name);
-		//Debug.Log(unusedWindow);
-
-		GUILayout.EndArea ();*/
-
-		if (GUILayout.Button("Debug")) 
-		{
-			Debug.Log (unusedWindow +", " + indice[unusedWindow]);
-		}
-		//funciona
-		//obj = (GameObject)EditorGUILayout.ObjectField (obj, typeof(StateClass));
-
-		GUILayout.EndHorizontal();
+		//atribui ao estado a acao selecionada no menu dropdown
+		stateMachine.StateList[unusedWindow].currentStateAction = stateMachine.actions.listaActions [stateWindows[unusedWindow].GetStateActionOption()]/*.GetStateActionOption()].stateAction*/;
 		GUI.DragWindow();
 	}
 
@@ -256,3 +187,52 @@ public class StateMachineEditor : EditorWindow
 
 
 			EndWindows ();*/
+
+//OLD CREATE WINDOW, DIDNT WORK SO GREAT
+/*void CreateWindow(int unusedWindow)
+{
+	//GUILayout.BeginHorizontal ();
+	//GUILayout.Label ("State Name");
+	//name = GUILayout.TextField (name, 25);
+	//stateWindows[unusedWindow].name = GUILayout.TextField(stateWindows[unusedWindow].name, 25);
+
+	stateWindows [unusedWindow].DrawWindow ();
+	stateMachine.StateList [unusedWindow].StateName = stateWindows [unusedWindow].GetStateName ();
+	//Debug.Log (unusedWindow + "  + " + stateWindows [unusedWindow].name);
+
+		//vai buscar as acoes disponiveis á lista de acoes para as mostrar no popup
+	string[] options = new string[stateMachine.actions.listaActions.Count];
+	for (int i = 0; i < stateMachine.actions.listaActions.Count; i++) 
+	{
+		options [i] = stateMachine.actions.listaActions [i].Name;
+	}
+
+	//POPUP para mostrar todas as acoes disponiveis
+	GUILayout.BeginArea (new Rect (95, 60, 100, 50));
+
+	indice = new int[stateWindows.Count];
+	lastIndice = EditorGUILayout.Popup (lastIndice, options); //PROBLEMA. NA SEGUNDA FRAME O INDICE NAO MUDA, LOGO FICAM OS DOIS ESTADOS COM A MESMA ACCAO!
+	indice[unusedWindow] = lastIndice;
+	//a opcao escolhida é o indice da acao a ser executada pelo estado.
+	//atribuimos a este estado a sua açao.
+
+	//procurar qual o estado da respetiva janela
+	//StateClass tempState = stateMachine.StateList.Find(x => x.ID == unusedWindow);
+	//tempState.currentStateAction = stateMachine.actions.listaActions [indice].stateAction;
+
+	stateMachine.StateList[unusedWindow].currentStateAction = stateMachine.actions.listaActions [lastIndice].stateAction;
+	//Debug.Log (stateMachine.actions.listaActions [indice].Name);
+	//Debug.Log(unusedWindow);
+
+	GUILayout.EndArea ();
+
+	if (GUILayout.Button("Debug")) 
+	{
+		Debug.Log (unusedWindow +", " + indice[unusedWindow]);
+	}
+	//funciona
+	//obj = (GameObject)EditorGUILayout.ObjectField (obj, typeof(StateClass));
+
+	//GUILayout.EndHorizontal();
+	GUI.DragWindow();
+}*/

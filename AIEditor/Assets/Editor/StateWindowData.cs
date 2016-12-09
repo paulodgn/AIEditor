@@ -23,15 +23,26 @@ public class StateWindowData {
 		{
 			optionsStateAction [i] = actions [i].Name;
 		}
-
-
-
-
 	}
 
 	public void DrawWindow()
 	{
+		GUILayout.BeginHorizontal ();
+		GUILayout.Label ("Name");
+		name = GUILayout.TextField (name);
+		GUILayout.EndHorizontal ();
+		GUILayout.Space (20);
+		GUILayout.Label ("State Action");
 		StateActionOption = EditorGUILayout.Popup (StateActionOption, optionsStateAction);
 	}
 
+	public int GetStateActionOption()
+	{
+		return StateActionOption;
+	}
+
+	public string GetStateName()
+	{
+		return name;
+	}
 }

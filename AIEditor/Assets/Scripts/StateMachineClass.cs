@@ -18,12 +18,12 @@ public class StateMachineClass : MonoBehaviour {
 	//acoes que podem ser executadas em cada estado
 	public ActionManager actions = new ActionManager();
 
-
+	//estado em que se encontra
+	private StateClass currentActiveState;
 
 	//variaveis para guardar informacao do formulario
 	private string newStateName;
 	private int newStateNumero;
-
 
 	void Awake()
 	{
