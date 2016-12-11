@@ -47,8 +47,11 @@
   <ItemGroup>
      <Compile Include="Assets\Scripts\ActionManager.cs" />
      <Compile Include="Assets\Scripts\ActionsList.cs" />
+     <Compile Include="Assets\Scripts\BaseClasses\IParameter.cs" />
      <Compile Include="Assets\Scripts\BaseClasses\StateAction.cs" />
+     <Compile Include="Assets\Scripts\BoolParameter.cs" />
      <Compile Include="Assets\Scripts\Interfaces\IAction.cs" />
+     <Compile Include="Assets\Scripts\ParametersList.cs" />
      <Compile Include="Assets\Scripts\StateActions\Run.cs" />
      <Compile Include="Assets\Scripts\StateClass.cs" />
      <Compile Include="Assets\Scripts\StateMachineClass.cs" />

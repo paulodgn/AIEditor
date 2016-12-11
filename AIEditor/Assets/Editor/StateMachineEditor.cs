@@ -22,6 +22,9 @@ public class StateMachineEditor : EditorWindow
 	//lista de janelas
 	List<StateWindowData> stateWindows = new List<StateWindowData>();
 
+	//janela para geraçao de parametros
+	ParameterCreator parameterCreator = new ParameterCreator(new Rect());
+
 	//para abrir a janela a partir do menu
 	[MenuItem ("AIEditor/StateMachine")]
 
@@ -30,15 +33,19 @@ public class StateMachineEditor : EditorWindow
 		//cria a janela
 		window = (StateMachineEditor)EditorWindow.GetWindow(typeof(StateMachineEditor));
 		//muda o titulo a janela
-		window.title = "State Machine";
-	}
+		//window.title = "State Machine";
 
+	}
+		
 
 	void OnGUI()
 	{
+		
 		//serve para debug. abre sempre a jenla sem ser necessario estar sempre a clicar no botao
 		if(window == null)
 			OpenWindow();
+
+		parameterCreator.janela = new Rect (window.position.width-200f, 20, 200, 200);
 
 		//mostra os elementos do objeto selecionado
 		if(Selection.activeGameObject != null)
@@ -83,6 +90,7 @@ public class StateMachineEditor : EditorWindow
 			//se existem janelas para desenhar, desenha
 			BeginWindows ();
 			EditorGUIUtility.LookLikeControls ();
+			//desenhar janelas para os estados
 			if (stateWindows.Count > 0) 
 			{
 				for (int i = 0; i < stateWindows.Count; i++) 
@@ -91,6 +99,10 @@ public class StateMachineEditor : EditorWindow
 
 				}
 			}
+
+			//desenhar janela para a geraçao de parametros
+			parameterCreator.janela = GUI.Window(999, parameterCreator.janela,CreateParameterWindow, "Parameters");
+
 			EndWindows ();
 
 		}
@@ -123,6 +135,11 @@ public class StateMachineEditor : EditorWindow
 		//atribui ao estado a acao selecionada no menu dropdown
 		stateMachine.StateList[unusedWindow].currentStateAction = stateMachine.actions.listaActions [stateWindows[unusedWindow].GetStateActionOption()]/*.GetStateActionOption()].stateAction*/;
 		GUI.DragWindow();
+	}
+
+	void CreateParameterWindow(int id)
+	{
+		parameterCreator.DrawWindow ();
 	}
 
 	void CreateNewState()

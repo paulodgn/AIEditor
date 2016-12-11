@@ -21,6 +21,7 @@ public class StateMachineClass : MonoBehaviour {
 	//estado em que se encontra
 	private StateClass currentActiveState;
 
+
 	//variaveis para guardar informacao do formulario
 	private string newStateName;
 	private int newStateNumero;
