@@ -15,6 +15,7 @@ public class StateMachineEditor : EditorWindow
 
 	//get objeto selecionado
 	private GameObject obj;
+	ParameterCreator parameterCreator;
 
 	//flag para determinar se ja foi efetuado load da maquina de estados
 	bool loaded=false;
@@ -22,8 +23,13 @@ public class StateMachineEditor : EditorWindow
 	//lista de janelas
 	List<StateWindowData> stateWindows = new List<StateWindowData>();
 
+	//dados do menu de criaçao de parametros
+	string txtParametro = "";
+	int opcaoTipoParametro = 0;
+	string[] tipoParametro = {"bool", "int", "float"};
+
 	//janela para geraçao de parametros
-	ParameterCreator parameterCreator = new ParameterCreator(new Rect());
+	//ParameterCreator parameterCreator = new ParameterCreator(new Rect());
 
 	//para abrir a janela a partir do menu
 	[MenuItem ("AIEditor/StateMachine")]
@@ -45,16 +51,18 @@ public class StateMachineEditor : EditorWindow
 		if(window == null)
 			OpenWindow();
 
-		parameterCreator.janela = new Rect (window.position.width-200f, 20, 200, 200);
+		//parameterCreator.janela = new Rect (window.position.width-200f, 20, 200, 200);
 
 		//mostra os elementos do objeto selecionado
 		if(Selection.activeGameObject != null)
 		{
 			obj = Selection.activeGameObject;
+			parameterCreator = Selection.activeGameObject.GetComponent<ParameterCreator> ();
 			GUI.Label(new Rect(0, 0, position.width, 25), "Current selected object: " + obj.name);
 
 		}
 
+		#region State Machine Windows
 		//mostra os campos do script statemachine associado ao objeto
 		stateMachine = obj.GetComponent<StateMachineClass>();
 
@@ -101,13 +109,55 @@ public class StateMachineEditor : EditorWindow
 			}
 
 			//desenhar janela para a geraçao de parametros
-			parameterCreator.janela = GUI.Window(999, parameterCreator.janela,CreateParameterWindow, "Parameters");
+			//parameterCreator.janela = GUI.Window(999, parameterCreator.janela,CreateParameterWindow, "Parameters");
 
 			EndWindows ();
 
 		}
+		#endregion
 
+		//Ui para criaçao de parametros
+		GUILayout.BeginArea(new Rect(window.position.width-200f, 20, 200, 200),"Parameters");
+		//GUI.Box(new Rect(window.position.width-200f, 20, 200, 200),"Parameters");
+		GUILayout.BeginVertical ();
+		//GUILayout.Label ("Parameter");
+		txtParametro = GUILayout.TextField (txtParametro);
+		opcaoTipoParametro = EditorGUILayout.Popup (opcaoTipoParametro, tipoParametro);
 
+		//imprimir lista
+		//parametersRL.DoLayoutList ();
+		for (int i = 0; i < parameterCreator.listaP.Count; i++) 
+		{
+			GUILayout.Label (parameterCreator.listaP[i].Name);
+		}
+
+		GUILayout.Space (10);
+		if (GUILayout.Button ("Create parameter")) 
+		{
+			//parameterCreator.listaP.Add (new BoolParameter ("teste", true));
+			if (txtParametro != "") 
+			{
+				//verificar qual o tipo de parametro escolhido
+				if (opcaoTipoParametro == 0) //bool
+				{
+					parameterCreator.listaP.Add(new BoolParameter(txtParametro, ParameterType.boolean, true));
+				}
+				if (opcaoTipoParametro == 1) //int 
+				{
+					parameterCreator.listaP.Add(new BoolParameter(txtParametro, ParameterType.integer, true));
+				}
+				if (opcaoTipoParametro == 2) //float
+				{
+					parameterCreator.listaP.Add(new BoolParameter(txtParametro, ParameterType.floatingPoint, true));
+				}
+			}
+				
+
+		}
+		GUILayout.EndVertical ();
+		GUILayout.EndArea ();
+
+		#region Manu Principal
 		//botao para remover o ultimo estado da lista
 		if (GUI.Button (new Rect (position.width / 2 - 100, position.height - 30, 200, 25), "Delete Last State")) 
 		{
@@ -122,6 +172,7 @@ public class StateMachineEditor : EditorWindow
 			stateMachine.actions.listaActions.Clear ();
 			stateMachine.actions.CreateActionList ();
 		}
+		#endregion
 	}
 
 	void CreateWindow(int unusedWindow)
@@ -139,7 +190,7 @@ public class StateMachineEditor : EditorWindow
 
 	void CreateParameterWindow(int id)
 	{
-		parameterCreator.DrawWindow ();
+		//parameterCreator.DrawWindow ();
 	}
 
 	void CreateNewState()

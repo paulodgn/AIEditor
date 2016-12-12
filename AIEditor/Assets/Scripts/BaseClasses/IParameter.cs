@@ -4,5 +4,6 @@ using System.Collections;
 
 public interface IParameter
 {
-	string Name { get; set;}
+	//string Name{ get; set;}
+
 }

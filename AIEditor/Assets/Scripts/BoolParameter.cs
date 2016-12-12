@@ -2,14 +2,18 @@
 using System.Collections;
 
 [System.Serializable]
-public class BoolParameter : IParameter 
+public class BoolParameter 
 {
-	public string Name { get; set;}
-	public bool Value;
+	public string Name;
+	public bool boolValue;
+	public int intValue;
+	public ParameterType parameterType;
 
-	public BoolParameter(string name, bool value)
+	public BoolParameter(string name, ParameterType type, bool value)
 	{
+		parameterType = type;
 		Name = name;
-		Value = value;
+		boolValue = value;
 	}
+		
 }

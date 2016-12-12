@@ -51,6 +51,8 @@
      <Compile Include="Assets\Scripts\BaseClasses\StateAction.cs" />
      <Compile Include="Assets\Scripts\BoolParameter.cs" />
      <Compile Include="Assets\Scripts\Interfaces\IAction.cs" />
+     <Compile Include="Assets\Scripts\ParameterCreator.cs" />
+     <Compile Include="Assets\Scripts\ParameterType.cs" />
      <Compile Include="Assets\Scripts\ParametersList.cs" />
      <Compile Include="Assets\Scripts\StateActions\Run.cs" />
      <Compile Include="Assets\Scripts\StateClass.cs" />

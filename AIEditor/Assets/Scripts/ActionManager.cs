@@ -19,6 +19,7 @@ public class ActionManager
 		StateAction run = new StateAction ("Run", (s) =>
 			{
 				//codigo
+
 				Debug.Log("tou a correr que nem um doido!");
 			});
 		listaActions.Add (run);

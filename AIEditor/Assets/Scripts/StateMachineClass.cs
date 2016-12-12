@@ -13,13 +13,15 @@ public enum AvaiableStates
 public class StateMachineClass : MonoBehaviour {
 
 
-	public List<StateClass> StateList;
+	public List<StateClass> StateList =  new List<StateClass>();
 
 	//acoes que podem ser executadas em cada estado
 	public ActionManager actions = new ActionManager();
 
 	//estado em que se encontra
 	private StateClass currentActiveState;
+
+	//criador de parametros
 
 
 	//variaveis para guardar informacao do formulario
@@ -34,7 +36,7 @@ public class StateMachineClass : MonoBehaviour {
 	// Use this for initialization
 	void Start () 
 	{
-		StateList = new List<StateClass>();
+		//StateList = new List<StateClass>();
 
 	}
 
