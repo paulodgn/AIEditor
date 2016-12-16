@@ -3,6 +3,8 @@ using UnityEditor;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditorInternal;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
 
 
 
@@ -28,9 +30,6 @@ public class StateMachineEditor : EditorWindow
 	int opcaoTipoParametro = 0;
 	string[] tipoParametro = {"bool", "int", "float"};
 
-	//janela para geraçao de parametros
-	//ParameterCreator parameterCreator = new ParameterCreator(new Rect());
-
 	//para abrir a janela a partir do menu
 	[MenuItem ("AIEditor/StateMachine")]
 
@@ -51,7 +50,6 @@ public class StateMachineEditor : EditorWindow
 		if(window == null)
 			OpenWindow();
 
-		//parameterCreator.janela = new Rect (window.position.width-200f, 20, 200, 200);
 
 		//mostra os elementos do objeto selecionado
 		if(Selection.activeGameObject != null)
@@ -74,9 +72,10 @@ public class StateMachineEditor : EditorWindow
 			{
 				if (GUILayout.Button ("Load StateMachine") ) 
 				{
+					LoadData();
 					for (int i = 0; i < stateMachine.StateList.Count; i++) 
 					{
-						stateWindows.Add (new StateWindowData (new Rect (10, 10, 200, 200), stateMachine.StateList[i].StateName, stateMachine.actions.listaActions));
+						stateWindows.Add (new StateWindowData (new Rect (10, 10, 200, 200), stateMachine.StateList[i].StateName, stateMachine.StateList[i].ActionID, stateMachine.actions.listaActions));
 					}
 					loaded = true;
 				}
@@ -91,7 +90,7 @@ public class StateMachineEditor : EditorWindow
 					//criamos um novo estado
 					stateMachine.CreateNewState (" ", stateMachine.StateList.Count);
 					//criamos uma nova janela
-					stateWindows.Add (new StateWindowData (new Rect (10, 10, 200, 200), " " + stateMachine.StateList.Count, stateMachine.actions.listaActions));
+					stateWindows.Add (new StateWindowData (new Rect (10, 10, 200, 200), " " + stateMachine.StateList.Count,0 , stateMachine.actions.listaActions));
 				}
 			}
 
@@ -116,6 +115,7 @@ public class StateMachineEditor : EditorWindow
 		}
 		#endregion
 
+		#region Parameter Creator
 		//Ui para criaçao de parametros
 		GUILayout.BeginArea(new Rect(window.position.width-200f, 20, 200, 200),"Parameters");
 		//GUI.Box(new Rect(window.position.width-200f, 20, 200, 200),"Parameters");
@@ -156,6 +156,7 @@ public class StateMachineEditor : EditorWindow
 		}
 		GUILayout.EndVertical ();
 		GUILayout.EndArea ();
+		#endregion
 
 		#region Manu Principal
 		//botao para remover o ultimo estado da lista
@@ -175,28 +176,61 @@ public class StateMachineEditor : EditorWindow
 		#endregion
 	}
 
+	#region Create State Window
 	void CreateWindow(int unusedWindow)
 	{
+
+
 		//desenha a janela respetiva
 		stateWindows [unusedWindow].DrawWindow ();
 
 		//atribui o nome do textfield ao nome do estado
 		stateMachine.StateList [unusedWindow].StateName = stateWindows [unusedWindow].GetStateName ();
 
+		//atribui ao estado o id da açao selecionada. Previne que ao fazer reload nao volta á ção default
+		stateMachine.StateList[unusedWindow].ActionID = stateWindows[unusedWindow].StateActionOption;
+
 		//atribui ao estado a acao selecionada no menu dropdown
 		stateMachine.StateList[unusedWindow].currentStateAction = stateMachine.actions.listaActions [stateWindows[unusedWindow].GetStateActionOption()]/*.GetStateActionOption()].stateAction*/;
 		GUI.DragWindow();
 	}
+	#endregion
 
-	void CreateParameterWindow(int id)
+	#region Save/Load
+	void OnDestroy()
 	{
-		//parameterCreator.DrawWindow ();
+		SaveData ();
 	}
 
-	void CreateNewState()
+
+
+	void SaveData()
 	{
-		
+		string data = "data para guardar";
+		BinaryFormatter bf = new BinaryFormatter();
+		FileStream file = File.Create(Application.persistentDataPath + "/StateMachineInfo.dat");
+		bf.Serialize (file, stateMachine.StateList);
+		file.Close ();
+
 	}
+
+	void LoadData()
+	{
+		if (File.Exists (Application.persistentDataPath + "/StateMachineInfo.dat")) 
+		{
+			BinaryFormatter bf = new BinaryFormatter ();
+			FileStream file = File.Open (Application.persistentDataPath + "/StateMachineInfo.dat", FileMode.Open);
+			List<StateClass> tempList = (List<StateClass>)bf.Deserialize (file);
+			file.Close ();
+			for (int i = 0; i < tempList.Count; i++) 
+			{
+				Debug.Log (tempList [i].StateName + " , " + tempList [i].ActionID + " , " + tempList [i].currentStateAction.Name);
+			}
+			stateMachine.StateList = tempList;
+		}
+
+	}
+	#endregion
 
 	void Update()
 	{

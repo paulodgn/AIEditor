@@ -7,16 +7,18 @@ using System.Collections.Generic;
 [System.Serializable]
 public class StateWindowData {
 
-	public Rect janela;
-	public string name;
+	public Rect janela;							//janela do estado
+	public string name;							//nome da janela
 
-	public int StateActionOption;
-	string[] optionsStateAction;
+	public int StateActionOption;				//opcao selecionada no popup
+	string[] optionsStateAction;				//opcoes que aparecem no popup
+
+	public int currentActionID;
 
 	public List<IParameter> listaParametros; 	//lista de parametros
-	ParameterCreator paramCreator;
+	ParameterCreator paramCreator;				
 
-	public StateWindowData(Rect janela, string nome, List<StateAction> actions)
+	public StateWindowData(Rect janela, string nome, int actionID, List<StateAction> actions)
 	{
 		this.janela = janela;							//area da janela a ser desenhada
 		this.name = nome;								//nome da janela	
@@ -31,6 +33,8 @@ public class StateWindowData {
 			optionsStateAction [i] = actions [i].Name;
 		}
 
+		//atribuir opcao da acao do estado.
+		StateActionOption = actionID;
 	
 	}
 
@@ -46,6 +50,7 @@ public class StateWindowData {
 
 		GUILayout.Label ("State Action");
 		StateActionOption = EditorGUILayout.Popup (StateActionOption, optionsStateAction);
+		currentActionID = StateActionOption;
 
 		GUILayout.Space (20);
 		GUILayout.EndVertical ();
