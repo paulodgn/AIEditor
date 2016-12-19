@@ -75,7 +75,7 @@ public class StateMachineEditor : EditorWindow
 					LoadData();
 					for (int i = 0; i < stateMachine.StateList.Count; i++) 
 					{
-						stateWindows.Add (new StateWindowData (new Rect (10, 10, 200, 200), stateMachine.StateList[i].StateName, stateMachine.StateList[i].ActionID, stateMachine.actions.listaActions));
+						stateWindows.Add (new StateWindowData (new Rect (10, 10, 200, 200), stateMachine.StateList[i].StateName, stateMachine.StateList[i].ActionID, stateMachine.actions.listaActions, parameterCreator));
 					}
 					loaded = true;
 				}
@@ -90,7 +90,7 @@ public class StateMachineEditor : EditorWindow
 					//criamos um novo estado
 					stateMachine.CreateNewState (" ", stateMachine.StateList.Count);
 					//criamos uma nova janela
-					stateWindows.Add (new StateWindowData (new Rect (10, 10, 200, 200), " " + stateMachine.StateList.Count,0 , stateMachine.actions.listaActions));
+					stateWindows.Add (new StateWindowData (new Rect (10, 10, 200, 200), " " + stateMachine.StateList.Count,0 , stateMachine.actions.listaActions, parameterCreator));
 				}
 			}
 
@@ -118,14 +118,13 @@ public class StateMachineEditor : EditorWindow
 		#region Parameter Creator
 		//Ui para criaçao de parametros
 		GUILayout.BeginArea(new Rect(window.position.width-200f, 20, 200, 200),"Parameters");
-		//GUI.Box(new Rect(window.position.width-200f, 20, 200, 200),"Parameters");
+
 		GUILayout.BeginVertical ();
-		//GUILayout.Label ("Parameter");
+
 		txtParametro = GUILayout.TextField (txtParametro);
 		opcaoTipoParametro = EditorGUILayout.Popup (opcaoTipoParametro, tipoParametro);
 
 		//imprimir lista
-		//parametersRL.DoLayoutList ();
 		for (int i = 0; i < parameterCreator.listaP.Count; i++) 
 		{
 			GUILayout.Label (parameterCreator.listaP[i].Name);
@@ -156,6 +155,9 @@ public class StateMachineEditor : EditorWindow
 		}
 		GUILayout.EndVertical ();
 		GUILayout.EndArea ();
+
+		//temos de actualizar os parametros
+
 		#endregion
 
 		#region Manu Principal
