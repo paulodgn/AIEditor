@@ -26,13 +26,23 @@ public class StateWindowData {
 
 	string[] OpcoesParametro;					//guarda o nome dos parametros criados. Usado no popup de escolha de parametro
 
-	public StateWindowData(Rect janela, string nome, int actionID, List<StateAction> actions, ParameterCreator paramCreator)
+	int stateID;								//id do estado da janela
+
+	List<Transition> tempTransition;			//lista de transiçoes do estado
+
+	int opcaoValorParametroBool=0;				//valor do paramtero de for bool
+
+	GameObject obj;
+
+	public StateWindowData(Rect janela, string nome, int stateID, int actionID, List<StateAction> actions, ParameterCreator paramCreator)
 	{
 		this.janela = janela;							//area da janela a ser desenhada
 		this.name = nome;								//nome da janela	
+		this.stateID = stateID;
 		optionsStateAction = new string[actions.Count];	//lista dos nomes da acoes disponiveis
 		parameterCreator = paramCreator;
 		OpcoesParametro = new string[parameterCreator.listaP.Count];
+		tempTransition = new List<Transition> ();
 
 		//guarda todos os nomes das acoes existentes para serem mostradas non popup
 		for (int i = 0; i < actions.Count; i++) 
@@ -69,30 +79,37 @@ public class StateWindowData {
 		//Transições
 		//Botao de adicionar transiçao
 		GUILayout.Label("Transitions");
-		if (GUILayout.Button (" + ")) 
+
+		//mostrar todos as transiçoes do estado
+
+		//tempTransition = GetStateTransitions();
+		if (Selection.activeGameObject != null) 
 		{
-			//pressionando o botao + adicionamos mais uma transição
-			numeroTransicoes++;
-		}
-		if (GUILayout.Button (" - ")) 
-		{
-			//pressionando o botao + removemos uma transicao
-			numeroTransicoes--;
+			obj = Selection.activeGameObject;
+
 		}
 
-		//desenhar campos para cada transicao
-		UpdateParameters();
-		GetParameterNames();
-		for (int i = 0; i < numeroTransicoes; i++) 
+		for (int i = 0; i < obj.GetComponent<StateMachineClass>().StateList[stateID].listaTransitions.Count; i++) 
 		{
-			TransitionPopupOption = EditorGUILayout.Popup (TransitionPopupOption, OpcoesParametro);
+			GUILayout.BeginHorizontal();
+			GUILayout.Label (obj.GetComponent<StateMachineClass>().StateList[stateID].listaTransitions[i].parameter.Name);
+			//GUILayout.Label (tempTransition [i].parameter.boolValue.ToString());
+			//opcaoValorParametroBool = EditorGUILayout.Popup(opcaoValorParametroBool,"");
+			GUILayout.EndHorizontal ();
 		}
+			
 		GUILayout.EndVertical ();
-
-
 
 	}
 
+	void TransitionWindow(int id)
+	{
+		GUILayout.BeginHorizontal ();
+
+		TransitionPopupOption = EditorGUILayout.Popup (TransitionPopupOption, OpcoesParametro);
+
+		GUILayout.EndHorizontal ();
+	}
 
 	void Cenas()
 	{
@@ -109,24 +126,22 @@ public class StateWindowData {
 		return name;
 	}
 
-	private void GetParameterNames()
+	List<Transition> GetStateTransitions()
 	{
-		//guarda o nome de todos os parametros disponiveis
-		OpcoesParametro = new string[parameterCreator.listaP.Count];
-		for (int j=0; j < parameterCreator.listaP.Count; j++) 
-		{
-			OpcoesParametro [j] = parameterCreator.listaP [j].Name;
-		}
-	}
-
-	public void UpdateParameters()
-	{
-		//parameterCreator = paramCreator;
-		if (Selection.activeObject != null) 
+		if (Selection.activeGameObject != null) 
 		{
 			GameObject obj = Selection.activeGameObject;
-			parameterCreator = obj.GetComponent<ParameterCreator> ();
-
+			StateMachineClass tempMachine = obj.GetComponent<StateMachineClass> ();
+			List<StateClass> tempStates = tempMachine.StateList;
+			for (int i = 0; i < tempStates.Count; i++) 
+			{
+				if (tempStates [i].ID == this.stateID) 
+				{
+					return tempStates [i].listaTransitions;
+				}
+			}
 		}
+		return null;
 	}
+
 }

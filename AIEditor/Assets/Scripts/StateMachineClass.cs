@@ -54,7 +54,7 @@ public class StateMachineClass : MonoBehaviour {
 		StateClass newState = new StateClass();
 		newState.StateName = name;
 		newState.ID = numero;
-
+		newState.listaTransitions = new List<Transition> ();
 		StateList.Add (newState);
 
 	}

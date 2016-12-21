@@ -57,6 +57,7 @@
      <Compile Include="Assets\Scripts\StateActions\Run.cs" />
      <Compile Include="Assets\Scripts\StateClass.cs" />
      <Compile Include="Assets\Scripts\StateMachineClass.cs" />
+     <Compile Include="Assets\Scripts\Transition.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files/Unity5.4/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>

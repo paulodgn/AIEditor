@@ -30,6 +30,14 @@ public class StateMachineEditor : EditorWindow
 	int opcaoTipoParametro = 0;
 	string[] tipoParametro = {"bool", "int", "float"};
 
+	//janela de criação de transiçoes
+	//nomes dos estados para o popup de criaçao de transiçoes
+	string[] stateNames;
+	int transitionPopupBeginStateIndex=0;
+	string[] parameterNames;
+	int transitionPopupParameterIndex=0;
+	int transitionPopupEndStateIndex=0;
+
 	//para abrir a janela a partir do menu
 	[MenuItem ("AIEditor/StateMachine")]
 
@@ -75,7 +83,12 @@ public class StateMachineEditor : EditorWindow
 					LoadData();
 					for (int i = 0; i < stateMachine.StateList.Count; i++) 
 					{
-						stateWindows.Add (new StateWindowData (new Rect (10, 10, 200, 200), stateMachine.StateList[i].StateName, stateMachine.StateList[i].ActionID, stateMachine.actions.listaActions, parameterCreator));
+						stateWindows.Add (new StateWindowData (new Rect (10, 10, 200, 300), 
+							stateMachine.StateList[i].StateName, 
+							stateMachine.StateList[i].ID,
+							stateMachine.StateList[i].ActionID, 
+							stateMachine.actions.listaActions, 
+							parameterCreator));
 					}
 					loaded = true;
 				}
@@ -90,7 +103,12 @@ public class StateMachineEditor : EditorWindow
 					//criamos um novo estado
 					stateMachine.CreateNewState (" ", stateMachine.StateList.Count);
 					//criamos uma nova janela
-					stateWindows.Add (new StateWindowData (new Rect (10, 10, 200, 200), " " + stateMachine.StateList.Count,0 , stateMachine.actions.listaActions, parameterCreator));
+					stateWindows.Add (new StateWindowData (new Rect (10, 10, 200, 300),
+						" " + stateMachine.StateList.Count,
+						0 ,
+						0 ,
+						stateMachine.actions.listaActions,
+						parameterCreator));
 				}
 			}
 
@@ -107,8 +125,7 @@ public class StateMachineEditor : EditorWindow
 				}
 			}
 
-			//desenhar janela para a geraçao de parametros
-			//parameterCreator.janela = GUI.Window(999, parameterCreator.janela,CreateParameterWindow, "Parameters");
+
 
 			EndWindows ();
 
@@ -160,7 +177,45 @@ public class StateMachineEditor : EditorWindow
 
 		#endregion
 
-		#region Manu Principal
+		#region Transition Creation
+
+		GUILayout.BeginArea(new Rect(window.position.width-200f, window.position.height/1.5f, 200, 200),"Transition");
+		GUILayout.Space(20);
+		GUILayout.BeginVertical();
+
+		//popup com todos os estados disponiveis
+		stateNames = new string[stateMachine.StateList.Count];
+		for(int i=0; i<stateMachine.StateList.Count;i++)
+		{
+			stateNames[i] = stateMachine.StateList[i].StateName;
+		}
+
+		transitionPopupBeginStateIndex = EditorGUILayout.Popup("From State", transitionPopupBeginStateIndex, stateNames);
+
+		//popup para escolha de parametro
+		parameterNames= new string[parameterCreator.listaP.Count];
+		for(int i=0; i<parameterCreator.listaP.Count;i++)
+		{
+			parameterNames[i] = parameterCreator.listaP[i].Name;
+		}
+		transitionPopupParameterIndex = EditorGUILayout.Popup("Parameter", transitionPopupParameterIndex,parameterNames);
+
+		//popup de estado de destino
+		transitionPopupEndStateIndex = EditorGUILayout.Popup("To State", transitionPopupEndStateIndex, stateNames);
+
+		if(GUILayout.Button("Create Transition"))
+		{
+
+			stateMachine.StateList[transitionPopupBeginStateIndex].listaTransitions.Add(
+				new Transition(parameterCreator.listaP[transitionPopupParameterIndex], stateMachine.StateList[transitionPopupEndStateIndex]));
+		}
+
+		GUILayout.EndVertical();
+		GUILayout.EndArea();
+
+		#endregion
+
+		#region Menu Principal
 		//botao para remover o ultimo estado da lista
 		if (GUI.Button (new Rect (position.width / 2 - 100, position.height - 30, 200, 25), "Delete Last State")) 
 		{
@@ -181,7 +236,6 @@ public class StateMachineEditor : EditorWindow
 	#region Create State Window
 	void CreateWindow(int unusedWindow)
 	{
-
 
 		//desenha a janela respetiva
 		stateWindows [unusedWindow].DrawWindow ();
@@ -233,6 +287,7 @@ public class StateMachineEditor : EditorWindow
 
 	}
 	#endregion
+
 
 	void Update()
 	{
