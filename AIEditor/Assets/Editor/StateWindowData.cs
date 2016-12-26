@@ -30,7 +30,10 @@ public class StateWindowData {
 
 	List<Transition> tempTransition;			//lista de transiçoes do estado
 
-	int opcaoValorParametroBool=0;				//valor do paramtero de for bool
+	int[] boolParameterValueIndex;				//valor do paramtero de for bool
+	int boolParameterPopupValue=0;				//valor do popup
+
+	string[] boolParameterValueOptions = {"False", "True"};					//valor do parametro se for do tipo bool
 
 	GameObject obj;
 
@@ -55,8 +58,15 @@ public class StateWindowData {
 			OpcoesParametro [j] = parameterCreator.listaP [j].Name;
 		}
 
-		//atribuir opcao da acao do estado.
+		//atribuir opcao da acao do estado ao fazer load.
 		StateActionOption = actionID;
+		//atribuir opcao do valor do parametro quando faz load.
+		if (Selection.activeGameObject != null) 
+		{
+			obj = Selection.activeGameObject;
+		}
+		//criar indice com tamanho para suportar o numero de transicoes existente
+		boolParameterValueIndex = new int[obj.GetComponent<StateMachineClass>().StateList[stateID].listaTransitions.Count];
 	
 	}
 
@@ -89,10 +99,28 @@ public class StateWindowData {
 
 		}
 
+
+
+		//mostar na janela os parametros de cada transiçao
 		for (int i = 0; i < obj.GetComponent<StateMachineClass>().StateList[stateID].listaTransitions.Count; i++) 
 		{
 			GUILayout.BeginHorizontal();
+			//nome do parametro
 			GUILayout.Label (obj.GetComponent<StateMachineClass>().StateList[stateID].listaTransitions[i].parameter.Name);
+
+			//valor do parametro, true ou false
+			boolParameterValueIndex[i] = EditorGUILayout.Popup(boolParameterValueIndex[i], boolParameterValueOptions);
+
+			//guardar valor escolhido no parametro actual
+			if (boolParameterValueIndex[i] == 0) 
+			{
+				obj.GetComponent<StateMachineClass> ().StateList [stateID].listaTransitions [i].parameter.boolValue = false;
+			}
+			if (boolParameterValueIndex[i] == 1) 
+			{
+				obj.GetComponent<StateMachineClass> ().StateList [stateID].listaTransitions [i].parameter.boolValue = true;
+			}
+
 			//GUILayout.Label (tempTransition [i].parameter.boolValue.ToString());
 			//opcaoValorParametroBool = EditorGUILayout.Popup(opcaoValorParametroBool,"");
 			GUILayout.EndHorizontal ();
@@ -100,6 +128,11 @@ public class StateWindowData {
 			
 		GUILayout.EndVertical ();
 
+	}
+
+	public void UpdateTransitionListCount()
+	{
+		boolParameterValueIndex = new int[obj.GetComponent<StateMachineClass>().StateList[stateID].listaTransitions.Count];//falta guardar os valores que ja la estao!!!!!!!!
 	}
 
 	void TransitionWindow(int id)

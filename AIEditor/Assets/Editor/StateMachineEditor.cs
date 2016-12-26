@@ -205,9 +205,12 @@ public class StateMachineEditor : EditorWindow
 
 		if(GUILayout.Button("Create Transition"))
 		{
-
+			//criar nova transicao
 			stateMachine.StateList[transitionPopupBeginStateIndex].listaTransitions.Add(
 				new Transition(parameterCreator.listaP[transitionPopupParameterIndex], stateMachine.StateList[transitionPopupEndStateIndex]));
+
+			//fazer update á lista de transiçoes na janela do estado que recebe a nova transiçao
+			stateWindows[transitionPopupBeginStateIndex].UpdateTransitionListCount();
 		}
 
 		GUILayout.EndVertical();
