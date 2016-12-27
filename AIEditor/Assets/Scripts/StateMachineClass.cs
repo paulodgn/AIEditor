@@ -36,14 +36,14 @@ public class StateMachineClass : MonoBehaviour {
 	// Use this for initialization
 	void Start () 
 	{
-		//StateList = new List<StateClass>();
+
 
 	}
 
 	// Update is called once per frame
 	void Update () 
 	{
-		
+		//se transicao está ativa, para a açao atual e vai para o proximo estado
 	}
 
 

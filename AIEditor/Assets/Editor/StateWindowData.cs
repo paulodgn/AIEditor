@@ -67,7 +67,19 @@ public class StateWindowData {
 		}
 		//criar indice com tamanho para suportar o numero de transicoes existente
 		boolParameterValueIndex = new int[obj.GetComponent<StateMachineClass>().StateList[stateID].listaTransitions.Count];
-	
+
+		//fazer load das transicoes previamente guardadas
+		for (int i = 0; i < obj.GetComponent<StateMachineClass> ().StateList [stateID].listaTransitions.Count; i++) 
+		{
+			if (obj.GetComponent<StateMachineClass> ().StateList [stateID].listaTransitions [i].parameter.boolValue) {
+				boolParameterValueIndex [i] = 1;
+			} 
+			else
+			{
+				boolParameterValueIndex [i] = 0;
+			}
+
+		}
 	}
 
 	public void DrawWindow()
@@ -130,9 +142,16 @@ public class StateWindowData {
 
 	}
 
+	//quando é inserido uma nova transiçao temos de aumentar a capacidade do array
 	public void UpdateTransitionListCount()
 	{
+		int[] tempValues = boolParameterValueIndex;
 		boolParameterValueIndex = new int[obj.GetComponent<StateMachineClass>().StateList[stateID].listaTransitions.Count];//falta guardar os valores que ja la estao!!!!!!!!
+		for (int i = 0; i < boolParameterValueIndex.Length; i++) 
+		{
+			if(i<tempValues.Length)
+				boolParameterValueIndex [i] = tempValues [i];
+		}
 	}
 
 	void TransitionWindow(int id)
