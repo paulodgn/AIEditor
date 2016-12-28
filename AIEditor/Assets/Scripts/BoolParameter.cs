@@ -5,6 +5,7 @@ using System.Collections;
 public class BoolParameter 
 {
 	public string Name;
+	public bool triggerValue;
 	public bool boolValue;
 	public int intValue;
 	public ParameterType parameterType;
@@ -13,7 +14,7 @@ public class BoolParameter
 	{
 		parameterType = type;
 		Name = name;
-		boolValue = value;
+		triggerValue = value;
 	}
 		
 }

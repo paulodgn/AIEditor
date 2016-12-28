@@ -71,7 +71,7 @@ public class StateWindowData {
 		//fazer load das transicoes previamente guardadas
 		for (int i = 0; i < obj.GetComponent<StateMachineClass> ().StateList [stateID].listaTransitions.Count; i++) 
 		{
-			if (obj.GetComponent<StateMachineClass> ().StateList [stateID].listaTransitions [i].parameter.boolValue) {
+			if (obj.GetComponent<StateMachineClass> ().StateList [stateID].listaTransitions [i].parameter.triggerValue) {
 				boolParameterValueIndex [i] = 1;
 			} 
 			else
@@ -126,11 +126,11 @@ public class StateWindowData {
 			//guardar valor escolhido no parametro actual
 			if (boolParameterValueIndex[i] == 0) 
 			{
-				obj.GetComponent<StateMachineClass> ().StateList [stateID].listaTransitions [i].parameter.boolValue = false;
+				obj.GetComponent<StateMachineClass> ().StateList [stateID].listaTransitions [i].parameter.triggerValue = false;
 			}
 			if (boolParameterValueIndex[i] == 1) 
 			{
-				obj.GetComponent<StateMachineClass> ().StateList [stateID].listaTransitions [i].parameter.boolValue = true;
+				obj.GetComponent<StateMachineClass> ().StateList [stateID].listaTransitions [i].parameter.triggerValue = true;
 			}
 
 			//GUILayout.Label (tempTransition [i].parameter.boolValue.ToString());

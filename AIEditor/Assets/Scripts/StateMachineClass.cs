@@ -36,14 +36,35 @@ public class StateMachineClass : MonoBehaviour {
 	// Use this for initialization
 	void Start () 
 	{
-
+		currentActiveState = StateList [0];
 
 	}
 
 	// Update is called once per frame
 	void Update () 
 	{
+
+		#region Verificar Transiçoes
 		//se transicao está ativa, para a açao atual e vai para o proximo estado
+		//para cada estado vamos verificar se alguma das transiçoes fez trigger
+		for (int i = 0; i < StateList.Count; i++) 
+		{
+			//verificar se alguma das transiçoes fez trigger
+			for (int j = 0; j < StateList [i].listaTransitions.Count; j++) 
+			{
+				StateList[i].listaTransitions[j].CheckTransition();
+				if (StateList [i].listaTransitions [j].triggered) 
+				{
+					//se transiçao ativa passa para o estado alvo
+					currentActiveState=StateList [i].listaTransitions [j].targetState;
+				}
+			}
+		}
+		#endregion
+
+		//executar ação do estado actual
+		actions.listaActions[currentActiveState.ActionID].ExecuteAction();
+		Debug.Log(currentActiveState.StateName);
 	}
 
 

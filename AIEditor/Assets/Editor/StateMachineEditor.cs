@@ -281,10 +281,10 @@ public class StateMachineEditor : EditorWindow
 			FileStream file = File.Open (Application.persistentDataPath + "/StateMachineInfo.dat", FileMode.Open);
 			List<StateClass> tempList = (List<StateClass>)bf.Deserialize (file);
 			file.Close ();
-			for (int i = 0; i < tempList.Count; i++) 
+			/*for (int i = 0; i < tempList.Count; i++) 
 			{
 				Debug.Log (tempList [i].StateName + " , " + tempList [i].ActionID + " , " + tempList [i].currentStateAction.Name);
-			}
+			}*/
 			stateMachine.StateList = tempList;
 		}
 
