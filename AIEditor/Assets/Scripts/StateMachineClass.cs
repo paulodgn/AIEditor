@@ -16,8 +16,8 @@ public class StateMachineClass : MonoBehaviour {
 	public List<StateClass> StateList =  new List<StateClass>();
 
 	//acoes que podem ser executadas em cada estado
-	public ActionManager actions = new ActionManager();
-
+	//public ActionManager actions = new ActionManager(gameObject);
+	public ActionManager actions;
 	//estado em que se encontra
 	private StateClass currentActiveState;
 
@@ -52,7 +52,9 @@ public class StateMachineClass : MonoBehaviour {
 			//verificar se alguma das transiçoes fez trigger
 			for (int j = 0; j < StateList [i].listaTransitions.Count; j++) 
 			{
-				StateList[i].listaTransitions[j].CheckTransition();
+				//StateList[i].listaTransitions[j].UpdatePArameterValue();
+				//StateList[i].listaTransitions[j].CheckTransition();
+				CheckTransition(StateList[i].listaTransitions[j]);
 				if (StateList [i].listaTransitions [j].triggered) 
 				{
 					//se transiçao ativa passa para o estado alvo
@@ -63,10 +65,24 @@ public class StateMachineClass : MonoBehaviour {
 		#endregion
 
 		//executar ação do estado actual
+		//actions.listaActions[currentActiveState.ActionID].ExecuteAction();
+		actions = GetComponent<ActionManager>();
 		actions.listaActions[currentActiveState.ActionID].ExecuteAction();
 		Debug.Log(currentActiveState.StateName);
 	}
 
+	void CheckTransition(Transition t)
+	{
+		BoolParameter realParameter = GetComponent<ParameterCreator> ().listaP.Find (p => p.Name == t.parameter.Name);
+		if (realParameter.boolValue == t.parameter.triggerValue) {
+			//se o valor do parametro for igual ao valor que dispara a transicao, entao ativa transiçao.
+			t.triggered = true;
+		}
+		else
+		{
+			t.triggered = false;
+		}
+	}
 
 	public void CreateNewState(string name, int numero)
 	{

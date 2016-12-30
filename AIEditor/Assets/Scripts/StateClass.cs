@@ -15,7 +15,7 @@ public class StateClass
 
 	public string teste;//opcao da acao do estado escolhida
 	//acao escolhida para o estado. Faz sentido? ou toda a acao? para que preciso do nome da acao?
-	public StateAction currentStateAction;
+	//public StateAction currentStateAction;
 
 	public List<Transition> listaTransitions;
 

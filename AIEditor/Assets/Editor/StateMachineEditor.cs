@@ -18,6 +18,7 @@ public class StateMachineEditor : EditorWindow
 	//get objeto selecionado
 	private GameObject obj;
 	ParameterCreator parameterCreator;
+	ActionManager actions;
 
 	//flag para determinar se ja foi efetuado load da maquina de estados
 	bool loaded=false;
@@ -64,6 +65,7 @@ public class StateMachineEditor : EditorWindow
 		{
 			obj = Selection.activeGameObject;
 			parameterCreator = Selection.activeGameObject.GetComponent<ParameterCreator> ();
+			actions = Selection.activeGameObject.GetComponent<ActionManager> ();
 			GUI.Label(new Rect(0, 0, position.width, 25), "Current selected object: " + obj.name);
 
 		}
@@ -87,7 +89,8 @@ public class StateMachineEditor : EditorWindow
 							stateMachine.StateList[i].StateName, 
 							stateMachine.StateList[i].ID,
 							stateMachine.StateList[i].ActionID, 
-							stateMachine.actions.listaActions, 
+							//stateMachine.actions.listaActions, 
+							actions.listaActions,
 							parameterCreator));
 					}
 					loaded = true;
@@ -107,7 +110,8 @@ public class StateMachineEditor : EditorWindow
 						" " + stateMachine.StateList.Count,
 						0 ,
 						0 ,
-						stateMachine.actions.listaActions,
+						//stateMachine.actions.listaActions,
+						actions.listaActions,
 						parameterCreator));
 				}
 			}
@@ -230,8 +234,8 @@ public class StateMachineEditor : EditorWindow
 		//botao para fazer load das acoes disponiveis
 		if (GUI.Button (new Rect (position.width / 2 - 100, position.height - 60, 200, 25), "Load Actions")) 
 		{
-			stateMachine.actions.listaActions.Clear ();
-			stateMachine.actions.CreateActionList ();
+			//stateMachine.actions.listaActions.Clear ();
+			//stateMachine.actions.CreateActionList ();
 		}
 		#endregion
 	}
@@ -250,7 +254,8 @@ public class StateMachineEditor : EditorWindow
 		stateMachine.StateList[unusedWindow].ActionID = stateWindows[unusedWindow].StateActionOption;
 
 		//atribui ao estado a acao selecionada no menu dropdown
-		stateMachine.StateList[unusedWindow].currentStateAction = stateMachine.actions.listaActions [stateWindows[unusedWindow].GetStateActionOption()]/*.GetStateActionOption()].stateAction*/;
+		//stateMachine.StateList[unusedWindow].currentStateAction = stateMachine.actions.listaActions [stateWindows[unusedWindow].GetStateActionOption()]/*.GetStateActionOption()].stateAction*/;
+		stateMachine.StateList[unusedWindow].ActionID = /*actions.listaActions [*/stateWindows[unusedWindow].GetStateActionOption()/*]/*.GetStateActionOption()].stateAction*/;
 		GUI.DragWindow();
 	}
 	#endregion
@@ -286,6 +291,7 @@ public class StateMachineEditor : EditorWindow
 				Debug.Log (tempList [i].StateName + " , " + tempList [i].ActionID + " , " + tempList [i].currentStateAction.Name);
 			}*/
 			stateMachine.StateList = tempList;
+			actions.CreateActionList ();
 		}
 
 	}

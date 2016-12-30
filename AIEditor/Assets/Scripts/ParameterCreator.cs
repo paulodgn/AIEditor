@@ -5,7 +5,7 @@ using System.Collections.Generic;
 //using UnityEditorInternal;
 
 
-
+[System.Serializable]
 public class ParameterCreator : MonoBehaviour
 {
 	public Rect janela;						//janela
@@ -20,8 +20,20 @@ public class ParameterCreator : MonoBehaviour
 	void Start()
 	{
 		for (int i = 0; i < listaP.Count; i++) {
-			Debug.Log (listaP [i].Name);
+			//Debug.Log (listaP [i].Name);
 		}
+	}
+
+	public BoolParameter GetParameter(string name)
+	{
+		for (int i = 0; i < listaP.Count; i++) 
+		{
+			if (listaP [i].Name == name) {
+				return listaP [i];
+			} else
+				return null;
+		}
+		return null;
 	}
 
 	/*

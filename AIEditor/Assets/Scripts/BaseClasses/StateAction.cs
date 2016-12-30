@@ -2,7 +2,7 @@
 using System.Collections;
 using System;
 
-[System.Serializable]
+//[System.Serializable]
 public class StateAction
 {
 	public string Name;			//nome da acao
