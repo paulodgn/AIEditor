@@ -17,11 +17,7 @@ public class Transition
 
 	public float floatValue;					//valor de comparação caso parametro seja float
 
-	public bool triggered;						//identifica o trigger da transiçao
-
-
-
-
+	public bool triggered;
 
 	public Transition(BoolParameter parameter, StateClass targetState)
 	{

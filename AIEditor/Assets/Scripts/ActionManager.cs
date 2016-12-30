@@ -19,8 +19,6 @@ public class ActionManager : MonoBehaviour
 
 	void Start()
 	{
-		//obj = GetComponent<GameObject> ();
-
 		listaActions.Clear ();
 		CreateActionList ();
 	}

@@ -163,11 +163,6 @@ public class StateWindowData {
 		GUILayout.EndHorizontal ();
 	}
 
-	void Cenas()
-	{
-		Debug.Log ("novas cenas");
-	}
-
 	public int GetStateActionOption()
 	{
 		return StateActionOption;
