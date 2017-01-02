@@ -12,6 +12,8 @@ public class StateClass
 	public int ID;
 
 	public int ActionID;
+	public int EntryActionID;
+	public int ExitActionID;
 
 	public string teste;//opcao da acao do estado escolhida
 	//acao escolhida para o estado. Faz sentido? ou toda a acao? para que preciso do nome da acao?

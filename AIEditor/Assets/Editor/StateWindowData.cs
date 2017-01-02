@@ -11,6 +11,9 @@ public class StateWindowData {
 	public string name;							//nome da janela
 
 	public int StateActionOption;				//opcao selecionada no popup
+	public int StateEntryActionOption;			//opcao de entry action selecionada no popup
+	public int StateExitActionOption;			//opcao de exit action selecionada no popup
+
 	string[] optionsStateAction;				//opcoes que aparecem no popup
 
 	public int currentActionID;
@@ -37,7 +40,7 @@ public class StateWindowData {
 
 	GameObject obj;
 
-	public StateWindowData(Rect janela, string nome, int stateID, int actionID, List<StateAction> actions, ParameterCreator paramCreator)
+	public StateWindowData(Rect janela, string nome, int stateID, int actionID, int entryActionID, int exitActiondID, List<StateAction> actions, ParameterCreator paramCreator)
 	{
 		this.janela = janela;							//area da janela a ser desenhada
 		this.name = nome;								//nome da janela	
@@ -60,6 +63,13 @@ public class StateWindowData {
 
 		//atribuir opcao da acao do estado ao fazer load.
 		StateActionOption = actionID;
+
+		//atribuir opcao da entry action do estado ao fazer load
+		StateEntryActionOption = entryActionID;
+
+		//atribuir opcao de exit action do estado ao fazer load
+		StateExitActionOption = exitActiondID;
+
 		//atribuir opcao do valor do parametro quando faz load.
 		if (Selection.activeGameObject != null) 
 		{
@@ -93,9 +103,19 @@ public class StateWindowData {
 		//Popup para escolha de ação de estado
 		GUILayout.BeginVertical ();
 		GUILayout.Space (20);
+		//state action
 		GUILayout.Label ("State Action");
 		StateActionOption = EditorGUILayout.Popup (StateActionOption, optionsStateAction);
 		currentActionID = StateActionOption;
+		GUILayout.Space (10);
+		//entry action
+		GUILayout.Label("Entry Action");
+		StateEntryActionOption = EditorGUILayout.Popup (StateEntryActionOption, optionsStateAction);
+
+		//exit action
+		GUILayout.Label("Exit Action");
+		StateExitActionOption = EditorGUILayout.Popup (StateExitActionOption, optionsStateAction);
+
 		GUILayout.Space (20);
 
 		//Transições

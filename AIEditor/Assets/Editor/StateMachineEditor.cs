@@ -89,6 +89,8 @@ public class StateMachineEditor : EditorWindow
 							stateMachine.StateList[i].StateName, 
 							stateMachine.StateList[i].ID,
 							stateMachine.StateList[i].ActionID, 
+							stateMachine.StateList[i].EntryActionID,
+							stateMachine.StateList[i].ExitActionID,
 							//stateMachine.actions.listaActions, 
 							actions.listaActions,
 							parameterCreator));
@@ -108,6 +110,8 @@ public class StateMachineEditor : EditorWindow
 					//criamos uma nova janela
 					stateWindows.Add (new StateWindowData (new Rect (10, 10, 200, 300),
 						" " + stateMachine.StateList.Count,
+						0 ,
+						0 ,
 						0 ,
 						0 ,
 						//stateMachine.actions.listaActions,
@@ -253,9 +257,16 @@ public class StateMachineEditor : EditorWindow
 		//atribui ao estado o id da açao selecionada. Previne que ao fazer reload nao volta á ção default
 		stateMachine.StateList[unusedWindow].ActionID = stateWindows[unusedWindow].StateActionOption;
 
-		//atribui ao estado a acao selecionada no menu dropdown
+		//atribui ao estado a acao selecionada no menu dropdown. Porque duas vezes??ah??
 		//stateMachine.StateList[unusedWindow].currentStateAction = stateMachine.actions.listaActions [stateWindows[unusedWindow].GetStateActionOption()]/*.GetStateActionOption()].stateAction*/;
 		stateMachine.StateList[unusedWindow].ActionID = /*actions.listaActions [*/stateWindows[unusedWindow].GetStateActionOption()/*]/*.GetStateActionOption()].stateAction*/;
+
+		//atribui ao estado a acao selecionada no popup de entry actions
+		stateMachine.StateList[unusedWindow].EntryActionID = stateWindows[unusedWindow].StateEntryActionOption;
+
+		//atribui ao estado a açao selecionada no popup da exit action
+		stateMachine.StateList[unusedWindow].ExitActionID = stateWindows[unusedWindow].StateExitActionOption;
+
 		GUI.DragWindow();
 	}
 	#endregion

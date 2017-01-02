@@ -25,21 +25,29 @@ public class ActionManager : MonoBehaviour
 
 	public void CreateActionList()
 	{
-		StateAction run = new StateAction ("Run", (s) =>
+		StateAction run = new StateAction ("CorVerde", (s) =>
 			{
 				//codigo
 				gameObject.GetComponent<Renderer>().material.color = Color.green;
-				Debug.Log("tou a correr que nem um doido!");
+				//Debug.Log("estou a ficar verde de raiva!");
 			});
 		listaActions.Add (run);
 
-		StateAction attack = new StateAction ("Attack", (s) =>
+		StateAction attack = new StateAction ("CorVermelho", (s) =>
 			{
 				//codigo
 				gameObject.GetComponent<Renderer>().material.color = Color.red;
-				Debug.Log("tou a atacar que nem um doido!");
+				//Debug.Log("estou a ficar vermelho!");
 			});
 		listaActions.Add (attack);
+
+		StateAction amarelo = new StateAction ("CorAmarelo", (s) =>
+			{
+				//codigo
+				gameObject.GetComponent<Renderer>().material.color = Color.yellow;
+				Debug.Log("estou a ficar amarelo!");
+			});
+		listaActions.Add (amarelo);
 
 	}
 }
