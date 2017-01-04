@@ -18,7 +18,7 @@ public class ParameterCreator : MonoBehaviour
 	public List<BoolParameter> listaP = new List<BoolParameter>();
 
 
-	public BoolParameter GetParameter(string name)
+	/*public BoolParameter GetParameter(string name)
 	{
 		for (int i = 0; i < listaP.Count; i++) 
 		{
@@ -27,7 +27,6 @@ public class ParameterCreator : MonoBehaviour
 			} else
 				return null;
 		}
-		return null;
-	}
+		return null;*/
 		
 }

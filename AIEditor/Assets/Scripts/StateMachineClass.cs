@@ -31,6 +31,10 @@ public class StateMachineClass : MonoBehaviour {
 	private bool exitActionExecuted = false;
 	private bool enterActionExecuted = false;
 
+	//debug
+	BoolParameter realParameter;
+	ParameterCreator pam;
+	Transition transition;
 
 	void Awake()
 	{
@@ -42,6 +46,8 @@ public class StateMachineClass : MonoBehaviour {
 	{
 		currentActiveState = StateList [0];
 		lastActiveState = currentActiveState;
+		pam = GetComponent<ParameterCreator>();
+		PrintStateList ();
 	}
 
 	// Update is called once per frame
@@ -51,54 +57,100 @@ public class StateMachineClass : MonoBehaviour {
 		#region Verificar Transiçoes
 		//se transicao está ativa, para a açao atual e vai para o proximo estado
 		//para cada estado vamos verificar se alguma das transiçoes fez trigger
-		//for (int i = 0; i < StateList.Count; i++) 
-		//{
+		for (int i = 0; i < StateList.Count; i++) 
+		{
 			//verificar se alguma das transiçoes fez trigger
-			for (int j = 0; j < currentActiveState.listaTransitions.Count; j++) 
+			for (int j = 0; j < StateList[i].listaTransitions.Count; j++) 
 			{
-				//StateList[i].listaTransitions[j].UpdatePArameterValue();
-				//StateList[i].listaTransitions[j].CheckTransition();
-				CheckTransition(currentActiveState.listaTransitions[j]);
-				if (currentActiveState.listaTransitions [j].triggered) 
+
+				if(StateList[i].listaTransitions[j]!=null)
+					CheckTransition(StateList[i].listaTransitions[j]);
+				
+				if (StateList[i].listaTransitions [j].triggered) 
 				{
+					
 					//se transiçao ativa passa para o estado alvo
-					currentActiveState=currentActiveState.listaTransitions [j].targetState;
-					Debug.Log(currentActiveState.StateName);
+					currentActiveState=StateList[i].listaTransitions [j].targetState;
+
+					//se existe transiçao antes de mudar de estado executa a exit action do estado atual
 					/*if(currentActiveState != lastActiveState)
 					{
-						enterActionExecuted=false;
-					}*/
-					//ao entrar no estado executa a entrty action
-					actions = GetComponent<ActionManager>();
-					if(!enterActionExecuted)
-					{
-						actions.listaActions[currentActiveState.EntryActionID].ExecuteAction();
-						lastActiveState = currentActiveState;
-						//enterActionExecuted = true;
+						exitActionExecuted=false;
 					}
+					actions = GetComponent<ActionManager>();
+					if(!exitActionExecuted)
+					{
+						actions.listaActions[lastActiveState.ExitActionID].ExecuteAction();
+						lastActiveState = currentActiveState;
+						exitActionExecuted=true;
+					}*/
+
+					//executa a entry action do novo estado
+					ExecuteEntryAction();
 				}
 			}
-		//}
+		}
 		#endregion
 
 		//executar ação do estado actual
 		//actions.listaActions[currentActiveState.ActionID].ExecuteAction();
 		actions = GetComponent<ActionManager>();
 		actions.listaActions[currentActiveState.ActionID].ExecuteAction();
-		//Debug.Log(currentActiveState.StateName);
+		for (int i = 0; i < currentActiveState.listaTransitions.Count; i++) 
+		{
+			currentActiveState.listaTransitions [i].triggered = false;
+		}
 	}
 
 	void CheckTransition(Transition t)
 	{
-		//Debug.Log (t.parameter.Name);
-		BoolParameter realParameter = GetComponent<ParameterCreator> ().listaP.Find (p => p.Name == t.parameter.Name);
-		if (realParameter.boolValue == t.parameter.triggerValue) {
-			//se o valor do parametro for igual ao valor que dispara a transicao, entao ativa transiçao.
-			t.triggered = true;
-		}
-		else
+		transition = t;
+		//BoolParameter realParameter = GetComponent<ParameterCreator> ().listaP.Find (p => p.Name == t.parameter.Name);
+
+		if (t != null) 
 		{
-			t.triggered = false;
+			for (int i = 0; i < pam.listaP.Count; i++) {
+				if (pam.listaP [i].Name == t.parameter.Name)
+					realParameter = pam.listaP [i];
+			}
+
+			
+			if (realParameter.boolValue == t.parameter.triggerValue) {
+				//se o valor do parametro for igual ao valor que dispara a transicao, entao ativa transiçao.
+				t.triggered = true;
+			} else {
+				t.triggered = false;
+			}
+		}
+	}
+
+	void ExecuteEntryAction()
+	{
+		//cada vez que muda de estado executa a entry action respetiva
+		if(currentActiveState != lastActiveState)
+		{
+			enterActionExecuted=false;
+		}
+		//ao entrar no estado executa a entrty action
+		actions = GetComponent<ActionManager>();
+		if(!enterActionExecuted)
+		{
+			actions.listaActions[lastActiveState.ExitActionID].ExecuteAction();
+			actions.listaActions[currentActiveState.EntryActionID].ExecuteAction();
+			lastActiveState = currentActiveState;
+			enterActionExecuted = true;
+		}
+	}
+
+	private void PrintStateList()
+	{
+		for (int i = 0; i < StateList.Count; i++) 
+		{
+			for (int j = 0; j < StateList [i].listaTransitions.Count; j++) 
+			{
+				Debug.Log (StateList [i].listaTransitions [j].parameter.Name + ", " + StateList[i].listaTransitions[j].triggered);
+			//Debug.Log(StateList[i].StateName);
+			}
 		}
 	}
 

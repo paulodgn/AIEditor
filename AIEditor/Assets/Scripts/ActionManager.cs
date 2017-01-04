@@ -49,5 +49,13 @@ public class ActionManager : MonoBehaviour
 			});
 		listaActions.Add (amarelo);
 
+		StateAction preto = new StateAction ("CorPreto", (s) =>
+			{
+				//codigo
+				gameObject.GetComponent<Renderer>().material.color = Color.black;
+				Debug.Log("estou a ficar preto!");
+			});
+		listaActions.Add (preto);
+
 	}
 }

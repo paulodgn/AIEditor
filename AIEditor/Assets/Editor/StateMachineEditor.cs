@@ -283,7 +283,7 @@ public class StateMachineEditor : EditorWindow
 	{
 		string data = "data para guardar";
 		BinaryFormatter bf = new BinaryFormatter();
-		FileStream file = File.Create(Application.persistentDataPath + "/StateMachineInfo.dat");
+		FileStream file = File.Create(Application.persistentDataPath + "/StateMachineStates.dat");
 		bf.Serialize (file, stateMachine.StateList);
 		file.Close ();
 
@@ -291,10 +291,10 @@ public class StateMachineEditor : EditorWindow
 
 	void LoadData()
 	{
-		if (File.Exists (Application.persistentDataPath + "/StateMachineInfo.dat")) 
+		if (File.Exists (Application.persistentDataPath + "/StateMachineStates.dat")) 
 		{
 			BinaryFormatter bf = new BinaryFormatter ();
-			FileStream file = File.Open (Application.persistentDataPath + "/StateMachineInfo.dat", FileMode.Open);
+			FileStream file = File.Open (Application.persistentDataPath + "/StateMachineStates.dat", FileMode.Open);
 			List<StateClass> tempList = (List<StateClass>)bf.Deserialize (file);
 			file.Close ();
 			/*for (int i = 0; i < tempList.Count; i++) 
